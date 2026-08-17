@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --leaf-dark:   #1a3d1f;
+  --leaf:        #2d6a35;
+  --leaf-mid:    #3d8b47;
+  --leaf-light:  #5db356;
+  --soil:        #7c5c3e;
+  --harvest:     #e8a020;
+  --harvest-lt:  #f5c842;
+  --cream:       #f7f3ed;
+  --cream-dark:  #ede8df;
+  --sky:         #4a90d9;
+  --bark:        #3d2b1f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--bark);
+}
+
+/* ── Leaf particle animation ──────────────────────────────── */
+@keyframes leafFall {
+  0%   { transform: translateY(-60px) rotate(0deg) translateX(0);   opacity: 0; }
+  10%  { opacity: 0.7; }
+  50%  { transform: translateY(45vh) rotate(180deg) translateX(30px); }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(100vh) rotate(360deg) translateX(-20px); opacity: 0; }
+}
+@keyframes leafSway {
+  0%,100% { transform: rotate(-8deg); }
+  50%      { transform: rotate(8deg); }
+}
+@keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(61,139,71,0.3); }
+  50%      { box-shadow: 0 0 0 12px rgba(61,139,71,0); }
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes growBar {
+  from { width: 0; }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  33%      { transform: translateY(-8px) rotate(2deg); }
+  66%      { transform: translateY(-4px) rotate(-2deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes ripple {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.animate-slide-up   { animation: slideUp 0.5s ease forwards; }
+.animate-fade-in    { animation: fadeIn 0.4s ease forwards; }
+.animate-float      { animation: float 4s ease-in-out infinite; }
+.animate-sway       { animation: leafSway 3s ease-in-out infinite; }
+.animate-spin-slow  { animation: spin-slow 20s linear infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* ── Leaf particle ────────────────────────────────────────── */
+.leaf-particle {
+  position: fixed;
+  width: 16px; height: 20px;
+  pointer-events: none;
+  z-index: 0;
+  animation: leafFall linear infinite;
+  opacity: 0;
+}
+
+/* ── Glassmorphism card ───────────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.5);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(26,61,31,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(26,61,31,0.14);
+}
+
+/* ── Stat card hover glow ─────────────────────────────────── */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(93,179,86,0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.stat-card:hover::before { opacity: 1; }
+
+/* ── Shimmer button ───────────────────────────────────────── */
+.btn-primary {
+  position: relative;
+  background: linear-gradient(135deg, var(--leaf) 0%, var(--leaf-mid) 50%, var(--leaf-light) 100%);
+  background-size: 200% auto;
+  color: white;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-position 0.4s ease, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(45,106,53,0.35);
+  letter-spacing: 0.02em;
+}
+.btn-primary:hover {
+  background-position: right center;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(45,106,53,0.45);
+}
+.btn-primary:active { transform: scale(0.97); }
+.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* ── Risk badges ──────────────────────────────────────────── */
+.risk-low      { background:#dcfce7; color:#166534; border:1px solid #86efac; }
+.risk-medium   { background:#fef9c3; color:#854d0e; border:1px solid #fde047; }
+.risk-high     { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+.risk-critical { background:#f3e8ff; color:#6b21a8; border:1px solid #d8b4fe; }
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--leaf-mid); border-radius: 3px; }
+
+/* ── Input ────────────────────────────────────────────────── */
+.field-input {
+  width: 100%;
+  border: 1.5px solid #d6d0c8;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.8);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.field-input:focus {
+  border-color: var(--leaf-mid);
+  box-shadow: 0 0 0 3px rgba(61,139,71,0.12);
+}
+.field-input.error {
+  border-color: #ef4444;
+  background: #fff5f5;
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+.progress-bar {
+  height: 6px;
+  background: var(--cream-dark);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--leaf), var(--leaf-light));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  animation: growBar 0.5s ease;
+}
+
+/* ── Ripple effect ────────────────────────────────────────── */
+.ripple-dot {
+  position: absolute;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: rgba(93,179,86,0.5);
+  animation: ripple 2s ease-out infinite;
+}
+
+/* ── Chart tooltip ────────────────────────────────────────── */
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: rgba(26,61,31,0.9) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: white !important;
+}
